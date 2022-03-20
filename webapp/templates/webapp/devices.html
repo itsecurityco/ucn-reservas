@@ -1,0 +1,52 @@
+{% extends "webapp/layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1 class="mt-5 mb-3">{{ title }}</h1>
+    <div id="message"></div>
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Dispositivo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for device in devices %}
+            <tr>
+                <td>{{ device.type }}</th>
+                <td>{{ device.brand }}</th>
+                <td>{{ device.model }}</th>
+                <td><a href="#" device-id="{{ device.id }}" onclick="send_form(this)">[solicitar]</a></th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function send_form(device) {
+            const data = new URLSearchParams();
+            data.append('device_id', device.getAttribute('device-id'));
+            
+            fetch("{% url 'borrow_post' %}", {
+                method: "POST",
+                body: data,
+            })
+            .then(response => response.json())
+            .then(result => {
+                var alertPlaceholder = document.getElementById('message')
+                var wrapper = document.createElement('div')
+                wrapper.innerHTML = '<div class="alert ' + result.type + ' alert-dismissible" role="alert">' + result.msg + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+                alertPlaceholder.append(wrapper)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+{% endblock %}

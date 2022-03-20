@@ -1,0 +1,42 @@
+{% extends "webapp/layout.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1 class="mt-5 mb-3">{{ title }}</h1>
+    <div id="message"></div>
+    {% if borrows %}
+    <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">Dispositivo</th>
+            <th scope="col">Mensajero asignado</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Fecha de solicitud</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for borrow in borrows %}
+            <tr>
+                <td>{{ borrow.device }}</th>
+                <td>
+                    {% if borrow.carrier == None %}
+                        --
+                    {% else %}
+                        {{ borrow.carrier.first_name }} 
+                        {{ borrow.carrier.last_name }}
+                    {% endif %}
+                </th>
+                <td>{{ borrow.get_status_display }}</th>
+                <td>{{ borrow.created_at }}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Usted no tiene prestamos registrados.
+        Haga clic en el men&uacute; Dispositivos para solicitar uno.
+    </div>
+    {% endif %}
+{% endblock %}
