@@ -2,7 +2,7 @@
 
 Para descargar el código fuente correr el comando `git clone`
 ```bash
-git clone git@github.com:itsecurityco/ucn-reservas.git
+git clone https://github.com/itsecurityco/ucn-reservas.git
 cd ucn-reservas
 ```
 
